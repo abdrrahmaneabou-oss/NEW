@@ -1,14 +1,6 @@
 name: Build FOX V12 presentation refresh
 
 on:
-  push:
-    branches: [main]
-    paths:
-      - 'scripts/**'
-      - 'src/**'
-      - '.github/workflows/build-fox.yml'
-      - 'FOX_AWG_Experimental.apk'
-      - 'FOX_AWG_Private_Project.zip'
   workflow_dispatch:
 
 permissions:
