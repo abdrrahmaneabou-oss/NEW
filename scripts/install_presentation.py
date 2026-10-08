@@ -14,7 +14,16 @@ def install(decoded, source):
     for path in source.rglob('*.smali'):
         relative = path.relative_to(source)
         name = relative.as_posix()
-        assert name.startswith('com/ponie/dayov12/ui/') or name.startswith('com/ponie/dayov12/FoxAwgUi'), name
+        allowed = (
+            name.startswith('com/ponie/dayov12/ui/')
+            or name.startswith('com/ponie/dayov12/FoxAwgUi')
+            or name.startswith('rikka/shizuku/')
+            or name.startswith('moe/shizuku/')
+        )
+        assert allowed, name
+        # Stage 2 is API bytecode only. Provider/Sui must not enter this build.
+        assert name != 'rikka/shizuku/ShizukuProvider.smali', name
+        assert not name.startswith('rikka/sui/'), name
         target = decoded / 'smali_classes3' / relative
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(path, target)
