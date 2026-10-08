@@ -20,7 +20,12 @@ UPDATE = ("Landroidx/work/impl/workers/ExpDialog$FetchUpdateConfigTask;", "onPos
 MOTION = ("Lcom/ponie/dayov12/MainActivity;", "isReducedMotionEnabled", "()Z")
 
 def presentation(key):
-    return key[0].startswith(("Lcom/ponie/dayov12/FoxAwgUi", "Lcom/ponie/dayov12/ui/"))
+    return key[0].startswith((
+        "Lcom/ponie/dayov12/FoxAwgUi",
+        "Lcom/ponie/dayov12/ui/",
+        "Lrikka/shizuku/",
+        "Lmoe/shizuku/",
+    ))
 
 def methods(archive):
     result = {}
@@ -90,6 +95,7 @@ def audit(baseline, final):
         return {"changed_methods": [list(k) for k in sorted(changed)], "unchanged_method_count": sum(k in new and old[k] == new[k] for k in old),
                 "protected_core_methods": len(protected),
                 "presentation_methods": sum(presentation(k) for k in new),
+                "shizuku_api_methods": sum(k[0].startswith(("Lrikka/shizuku/", "Lmoe/shizuku/")) for k in new),
                 "deleted_legacy_ui_methods": sum(k not in new for k in old),
                 "remote_update_dialog_suppressed": True,
                 "verified_apk_entry_count": len(unchanged), "native_and_packet_logic_unchanged": True,
