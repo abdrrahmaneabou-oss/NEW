@@ -23,12 +23,18 @@ jobs:
           SOURCE_SHA="ca6a3be30168675a36d9c16acb74e281ac2c33e9"
           git clone --quiet https://github.com/abdrrahmaneabou-oss/FOX.git /tmp/fox40
           git -C /tmp/fox40 checkout --quiet "$SOURCE_SHA"
-          rsync -a --delete --exclude='.git' /tmp/fox40/ "$GITHUB_WORKSPACE/"
-          test -f .github/workflows/build-fox.yml
+          rsync -a --delete \
+            --exclude='.git' \
+            --exclude='.github/workflows/' \
+            /tmp/fox40/ "$GITHUB_WORKSPACE/"
           test -f FOX_AWG_Experimental.apk
           printf '%s\n' "$SOURCE_SHA" > BUILD40_SOURCE_COMMIT.txt
           git config user.name "CHATGPT"
           git config user.email "abdrrahmaneabou@gmail.com"
           git add -A
-          git commit -m "Reset NEW to exact FOX Build #40 snapshot"
-          git push origin HEAD:main
+          if git diff --cached --quiet; then
+            echo "Snapshot already synchronized"
+          else
+            git commit -m "Reset NEW to exact FOX Build #40 snapshot"
+            git push origin HEAD:main
+          fi
